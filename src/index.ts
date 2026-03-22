@@ -151,7 +151,7 @@ authTokenCommand
     try {
       const serverUrl = options.server;
 
-      console.log(chalk.cyan('Creating authenticationh token...'));
+      console.log(chalk.cyan('Creating authentication token...'));
       console.log(chalk.gray('─'.repeat(50)));
 
       const axios = require('axios');
@@ -221,14 +221,18 @@ authTokenCommand
       console.log(chalk.white(`  tunnel http <port> -t ${token}`));
       console.log(chalk.gray('Or set it as an environment variable:'));
       console.log(chalk.white(`  export TUNNEL_TOKEN=${token}\n`));
-    } catch (error) {
+    } catch (error: any) {
       console.error(chalk.red('\n✗ Error creating token:'));
-      if (error.response?.data?.message) {
-        console.error(chalk.red(error.response.data.message));
-      } else if (error.message) {
-        console.error(chalk.red(error.message));
-      } else {
-        console.error(chalk.red('An unknown error occurred'));
+      const msg =
+        error?.response?.data?.message ??
+        error?.response?.data?.error ??
+        error?.message ??
+        (error?.code === 'ECONNREFUSED'
+          ? `Cannot connect to server at ${options.server}. Is the tunnel server running?`
+          : 'An unknown error occurred');
+      console.error(chalk.red(msg));
+      if (process.env.DEBUG) {
+        console.error(chalk.gray('\nDebug:'), error);
       }
       process.exit(1);
     }

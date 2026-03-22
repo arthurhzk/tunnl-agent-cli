@@ -31,7 +31,7 @@ export class TunnelClient {
       const isReconnection = this.messageHandler !== null;
 
       this.socket = io(`${this.options.serverUrl}/agent`, {
-        transports: ['websocket'],
+        transports: ['websocket', 'polling'],
         reconnection: false, // We'll handle reconnection manually
         autoConnect: true,
         timeout: 60000, // 60 seconds (default is 20 seconds)

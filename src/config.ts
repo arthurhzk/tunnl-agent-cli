@@ -4,7 +4,7 @@ dotenv.config({ quiet: true });
 
 const SERVER_URL =
   process.env.NODE_ENV === 'development'
-    ? process.env.TUNNEL_SERVER_URL
+    ? process.env.TUNNEL_SERVER_URL || 'http://localhost:8080'
     : 'https://tunnl.fit';
 const APP_AGENT_VERSION =
   process.env.NODE_ENV === 'development' ? process.env.AGENT_VERSION : '1.0.3';
